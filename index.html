@@ -173,12 +173,12 @@
             background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 1000;
         }
         
-        /* 獎狀樣式 - 調整為橫式 A4 比例 */
+        /* 獎狀樣式 - 橫式 A4 比例 */
         .certificate {
             background: #fffdf5;
             padding: 40px;
             border-radius: 4px;
-            width: 900px; /* 橫式寬度 */
+            width: 900px; 
             max-width: 95vw;
             position: relative;
             border: 15px solid #c0a16b;
@@ -193,7 +193,6 @@
             border: 2px solid #c0a16b;
             padding: 25px 40px;
             height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="none" stroke="%23f2e8cf" stroke-width="0.5"/></svg>');
         }
         .cert-header { color: #8e6d31; font-size: 42px; font-weight: 900; margin-bottom: 10px; letter-spacing: 15px; }
         .cert-title { font-size: 20px; color: #5d4037; margin-bottom: 20px; border-bottom: 1px solid #d7ccc8; display: inline-block; padding-bottom: 5px; }
@@ -208,10 +207,18 @@
         .cert-praise { flex: 1; font-size: 24px; color: #1565c0; font-weight: bold; text-shadow: 1px 1px 1px rgba(0,0,0,0.1); }
 
         .cert-footer { margin-top: 20px; display: flex; justify-content: space-between; align-items: flex-end; }
-        .seal-container { position: relative; }
-        .seal { width: 110px; height: 110px; opacity: 0.85; filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.1)); }
+        .seal { width: 110px; height: 110px; opacity: 0.85; }
         
-        .reset-btn-container { margin-top: 30px; }
+        /* 簡約版成功視窗 */
+        .simple-success {
+            background: white;
+            padding: 40px;
+            border-radius: 24px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
     </style>
 </head>
 <body>
@@ -229,6 +236,7 @@
     </div>
 
     <div class="keyboard-frame">
+        <!-- 鍵盤結構與之前相同 -->
         <div class="indicator-panel">
             <div class="indicator"><div id="led-num" class="led active"></div><div class="led-label">Num</div></div>
             <div class="indicator"><div id="led-caps" class="led"></div><div class="led-label">Caps</div></div>
@@ -237,102 +245,53 @@
 
         <div class="keyboard-main-layout">
             <div class="section-alpha">
-                <!-- 第一排 -->
                 <div class="kb-row">
-                    <div class="key" data-code="Escape"><span>Esc</span></div>
-                    <div style="width: 40px"></div>
+                    <div class="key" data-code="Escape"><span>Esc</span></div><div style="width: 40px"></div>
                     <div class="key" data-code="F1"><span>F1</span></div><div class="key" data-code="F2"><span>F2</span></div><div class="key" data-code="F3"><span>F3</span></div><div class="key" data-code="F4"><span>F4</span></div>
                     <div style="width: 25px"></div>
                     <div class="key" data-code="F5"><span>F5</span></div><div class="key" data-code="F6"><span>F6</span></div><div class="key" data-code="F7"><span>F7</span></div><div class="key" data-code="F8"><span>F8</span></div>
                     <div style="width: 25px"></div>
                     <div class="key" data-code="F9"><span>F9</span></div><div class="key" data-code="F10"><span>F10</span></div><div class="key" data-code="F11"><span>F11</span></div><div class="key" data-code="F12"><span>F12</span></div>
                 </div>
-                <!-- 數字排 -->
                 <div class="kb-row">
-                    <div class="key" data-code="Backquote"><span>~<br>`</span></div>
-                    <div class="key" data-code="Digit1"><span>!<br>1</span></div>
-                    <div class="key" data-code="Digit2" id="key-digit2"><span>@<br>2</span></div>
-                    <div class="key" data-code="Digit3"><span>#<br>3</span></div>
-                    <div class="key" data-code="Digit4"><span>$<br>4</span></div>
-                    <div class="key" data-code="Digit5"><span>%<br>5</span></div>
-                    <div class="key" data-code="Digit6"><span>^<br>6</span></div>
-                    <div class="key" data-code="Digit7"><span>&<br>7</span></div>
-                    <div class="key" data-code="Digit8"><span>*<br>8</span></div>
-                    <div class="key" data-code="Digit9"><span>(<br>9</span></div>
-                    <div class="key" data-code="Digit0"><span>)<br>0</span></div>
-                    <div class="key" data-code="Minus"><span>_<br>-</span></div>
-                    <div class="key" data-code="Equal"><span>+<br>=</span></div>
-                    <div class="key w-backspace" data-code="Backspace"><span>Backspace</span></div>
+                    <div class="key" data-code="Backquote"><span>~<br>`</span></div><div class="key" data-code="Digit1"><span>!<br>1</span></div><div class="key" data-code="Digit2" id="key-digit2"><span>@<br>2</span></div><div class="key" data-code="Digit3"><span>#<br>3</span></div><div class="key" data-code="Digit4"><span>$<br>4</span></div><div class="key" data-code="Digit5"><span>%<br>5</span></div><div class="key" data-code="Digit6"><span>^<br>6</span></div><div class="key" data-code="Digit7"><span>&<br>7</span></div><div class="key" data-code="Digit8"><span>*<br>8</span></div><div class="key" data-code="Digit9"><span>(<br>9</span></div><div class="key" data-code="Digit0"><span>)<br>0</span></div><div class="key" data-code="Minus"><span>_<br>-</span></div><div class="key" data-code="Equal"><span>+<br>=</span></div><div class="key w-backspace" data-code="Backspace"><span>Backspace</span></div>
                 </div>
-                <!-- 第三排 -->
                 <div class="kb-row">
-                    <div class="key w-tab" data-code="Tab"><span>Tab</span></div>
-                    <div class="key" data-code="KeyQ"><span>Q</span></div><div class="key" data-code="KeyW"><span>W</span></div><div class="key" data-code="KeyE"><span>E</span></div><div class="key" data-code="KeyR"><span>R</span></div><div class="key" data-code="KeyT"><span>T</span></div><div class="key" data-code="KeyY"><span>Y</span></div><div class="key" data-code="KeyU"><span>U</span></div><div class="key" data-code="KeyI"><span>I</span></div><div class="key" data-code="KeyO"><span>O</span></div><div class="key" data-code="KeyP"><span>P</span></div>
-                    <div class="key" data-code="BracketLeft"><span>{<br>[</span></div><div class="key" data-code="BracketRight"><span>}<br>]</span></div><div class="key" style="width: 58px;" data-code="Backslash"><span>|<br>\</span></div>
+                    <div class="key w-tab" data-code="Tab"><span>Tab</span></div><div class="key" data-code="KeyQ"><span>Q</span></div><div class="key" data-code="KeyW"><span>W</span></div><div class="key" data-code="KeyE"><span>E</span></div><div class="key" data-code="KeyR"><span>R</span></div><div class="key" data-code="KeyT"><span>T</span></div><div class="key" data-code="KeyY"><span>Y</span></div><div class="key" data-code="KeyU"><span>U</span></div><div class="key" data-code="KeyI"><span>I</span></div><div class="key" data-code="KeyO"><span>O</span></div><div class="key" data-code="KeyP"><span>P</span></div><div class="key" data-code="BracketLeft"><span>{<br>[</span></div><div class="key" data-code="BracketRight"><span>}<br>]</span></div><div class="key" style="width: 58px;" data-code="Backslash"><span>|<br>\</span></div>
                 </div>
-                <!-- 第四排 -->
                 <div class="kb-row">
-                    <div class="key w-caps" data-code="CapsLock"><span>Caps Lock</span></div>
-                    <div class="key" data-code="KeyA"><span>A</span></div><div class="key" data-code="KeyS"><span>S</span></div><div class="key" data-code="KeyD"><span>D</span></div><div class="key" data-code="KeyF"><span>F</span></div><div class="key" data-code="KeyG"><span>G</span></div><div class="key" data-code="KeyH"><span>H</span></div><div class="key" data-code="KeyJ"><span>J</span></div><div class="key" data-code="KeyK"><span>K</span></div><div class="key" data-code="KeyL"><span>L</span></div>
-                    <div class="key" data-code="Semicolon"><span>:<br>;</span></div><div class="key" data-code="Quote"><span>"<br>'</span></div><div class="key w-enter" data-code="Enter"><span>Enter</span></div>
+                    <div class="key w-caps" data-code="CapsLock"><span>Caps Lock</span></div><div class="key" data-code="KeyA"><span>A</span></div><div class="key" data-code="KeyS"><span>S</span></div><div class="key" data-code="KeyD"><span>D</span></div><div class="key" data-code="KeyF"><span>F</span></div><div class="key" data-code="KeyG"><span>G</span></div><div class="key" data-code="KeyH"><span>H</span></div><div class="key" data-code="KeyJ"><span>J</span></div><div class="key" data-code="KeyK"><span>K</span></div><div class="key" data-code="KeyL"><span>L</span></div><div class="key" data-code="Semicolon"><span>:<br>;</span></div><div class="key" data-code="Quote"><span>"<br>'</span></div><div class="key w-enter" data-code="Enter"><span>Enter</span></div>
                 </div>
-                <!-- 第五排 -->
                 <div class="kb-row">
-                    <div class="key w-shift-l" data-code="ShiftLeft" id="key-shift-l"><span>Shift</span></div>
-                    <div class="key" data-code="KeyZ"><span>Z</span></div><div class="key" data-code="KeyX"><span>X</span></div><div class="key" data-code="KeyC"><span>C</span></div><div class="key" data-code="KeyV"><span>V</span></div><div class="key" data-code="KeyB"><span>B</span></div><div class="key" data-code="KeyN"><span>N</span></div><div class="key" data-code="KeyM"><span>M</span></div>
-                    <div class="key" data-code="Comma"><span>< <br>,</span></div><div class="key" data-code="Period"><span>> <br>.</span></div><div class="key" data-code="Slash"><span>?<br>/</span></div>
-                    <div class="key w-shift-r" data-code="ShiftRight" id="key-shift-r"><span>Shift</span></div>
+                    <div class="key w-shift-l" data-code="ShiftLeft" id="key-shift-l"><span>Shift</span></div><div class="key" data-code="KeyZ"><span>Z</span></div><div class="key" data-code="KeyX"><span>X</span></div><div class="key" data-code="KeyC"><span>C</span></div><div class="key" data-code="KeyV"><span>V</span></div><div class="key" data-code="KeyB"><span>B</span></div><div class="key" data-code="KeyN"><span>N</span></div><div class="key" data-code="KeyM"><span>M</span></div><div class="key" data-code="Comma"><span>< <br>,</span></div><div class="key" data-code="Period"><span>> <br>.</span></div><div class="key" data-code="Slash"><span>?<br>/</span></div><div class="key w-shift-r" data-code="ShiftRight" id="key-shift-r"><span>Shift</span></div>
                 </div>
-                <!-- 第六排 -->
                 <div class="kb-row">
-                    <div class="key w-ctrl" data-code="ControlLeft"><span>Ctrl</span></div><div class="key" data-code="MetaLeft"><span>Win</span></div><div class="key" data-code="AltLeft"><span>Alt</span></div>
-                    <div class="key w-space" data-code="Space"><span>Space</span></div>
-                    <div class="key" data-code="AltRight"><span>Alt</span></div><div class="key" data-code="MetaRight"><span>Win</span></div><div class="key" data-code="ContextMenu"><span>Menu</span></div><div class="key w-ctrl" data-code="ControlRight"><span>Ctrl</span></div>
+                    <div class="key w-ctrl" data-code="ControlLeft"><span>Ctrl</span></div><div class="key" data-code="MetaLeft"><span>Win</span></div><div class="key" data-code="AltLeft"><span>Alt</span></div><div class="key w-space" data-code="Space"><span>Space</span></div><div class="key" data-code="AltRight"><span>Alt</span></div><div class="key" data-code="MetaRight"><span>Win</span></div><div class="key" data-code="ContextMenu"><span>Menu</span></div><div class="key w-ctrl" data-code="ControlRight"><span>Ctrl</span></div>
                 </div>
             </div>
-            <!-- 中間導覽區 -->
             <div class="section-nav">
-                <div class="kb-row">
-                    <div class="key" data-code="PrintScreen"><span>PrtSc</span></div><div class="key" data-code="ScrollLock"><span>Scroll</span></div><div class="key" data-code="Pause"><span>Pause</span></div>
-                </div>
+                <div class="kb-row"><div class="key" data-code="PrintScreen"><span>PrtSc</span></div><div class="key" data-code="ScrollLock"><span>Scroll</span></div><div class="key" data-code="Pause"><span>Pause</span></div></div>
                 <div style="height: 54px"></div>
-                <div class="kb-row">
-                    <div class="key" data-code="Insert"><span>Ins</span></div><div class="key" data-code="Home"><span>Home</span></div><div class="key" data-code="PageUp"><span>PgUp</span></div>
-                </div>
-                <div class="kb-row">
-                    <div class="key" data-code="Delete"><span>Del</span></div><div class="key" data-code="End"><span>End</span></div><div class="key" data-code="PageDown"><span>PgDn</span></div>
-                </div>
+                <div class="kb-row"><div class="key" data-code="Insert"><span>Ins</span></div><div class="key" data-code="Home"><span>Home</span></div><div class="key" data-code="PageUp"><span>PgUp</span></div></div>
+                <div class="kb-row"><div class="key" data-code="Delete"><span>Del</span></div><div class="key" data-code="End"><span>End</span></div><div class="key" data-code="PageDown"><span>PgDn</span></div></div>
                 <div style="height: 54px"></div>
                 <div class="kb-row" style="justify-content: center;"><div class="key" data-code="ArrowUp"><span>▲</span></div></div>
-                <div class="kb-row">
-                    <div class="key" data-code="ArrowLeft"><span>◄</span></div><div class="key" data-code="ArrowDown"><span>▼</span></div><div class="key" data-code="ArrowRight"><span>►</span></div>
-                </div>
+                <div class="kb-row"><div class="key" data-code="ArrowLeft"><span>◄</span></div><div class="key" data-code="ArrowDown"><span>▼</span></div><div class="key" data-code="ArrowRight"><span>►</span></div></div>
             </div>
-            <!-- 數字區 -->
             <div class="section-numpad">
                 <div style="height: 54px"></div>
-                <div class="kb-row">
-                    <div class="key" data-code="NumLock"><span>Num</span></div><div class="key" data-code="NumpadDivide"><span>/</span></div><div class="key" data-code="NumpadMultiply"><span>*</span></div><div class="key" data-code="NumpadSubtract"><span>-</span></div>
-                </div>
+                <div class="kb-row"><div class="key" data-code="NumLock"><span>Num</span></div><div class="key" data-code="NumpadDivide"><span>/</span></div><div class="key" data-code="NumpadMultiply"><span>*</span></div><div class="key" data-code="NumpadSubtract"><span>-</span></div></div>
                 <div class="kb-row">
                     <div style="display: flex; flex-direction: column;">
-                        <div class="kb-row" style="margin-bottom: 6px;">
-                            <div class="key" data-code="Numpad7"><span>7</span></div><div class="key" data-code="Numpad8"><span>8</span></div><div class="key" data-code="Numpad9"><span>9</span></div>
-                        </div>
-                        <div class="kb-row">
-                            <div class="key" data-code="Numpad4"><span>4</span></div><div class="key" data-code="Numpad5"><span>5</span></div><div class="key" data-code="Numpad6"><span>6</span></div>
-                        </div>
+                        <div class="kb-row" style="margin-bottom: 6px;"><div class="key" data-code="Numpad7"><span>7</span></div><div class="key" data-code="Numpad8"><span>8</span></div><div class="key" data-code="Numpad9"><span>9</span></div></div>
+                        <div class="kb-row"><div class="key" data-code="Numpad4"><span>4</span></div><div class="key" data-code="Numpad5"><span>5</span></div><div class="key" data-code="Numpad6"><span>6</span></div></div>
                     </div>
                     <div class="key" style="height: 102px;" data-code="NumpadAdd"><span>+</span></div>
                 </div>
                 <div class="kb-row">
                     <div style="display: flex; flex-direction: column;">
-                        <div class="kb-row" style="margin-bottom: 6px;">
-                            <div class="key" data-code="Numpad1"><span>1</span></div><div class="key" data-code="Numpad2"><span>2</span></div><div class="key" data-code="Numpad3"><span>3</span></div>
-                        </div>
-                        <div class="kb-row">
-                            <div class="key w-numpad-0" data-code="Numpad0"><span>0</span></div><div class="key" data-code="NumpadDecimal"><span>.</span></div>
-                        </div>
+                        <div class="kb-row" style="margin-bottom: 6px;"><div class="key" data-code="Numpad1"><span>1</span></div><div class="key" data-code="Numpad2"><span>2</span></div><div class="key" data-code="Numpad3"><span>3</span></div></div>
+                        <div class="kb-row"><div class="key w-numpad-0" data-code="Numpad0"><span>0</span></div><div class="key" data-code="NumpadDecimal"><span>.</span></div></div>
                     </div>
                     <div class="key" style="height: 102px;" data-code="NumpadEnter"><span>Ent</span></div>
                 </div>
@@ -340,33 +299,18 @@
         </div>
     </div>
 
-    <!-- 教學小知識 -->
     <div id="tutorialCards" class="tutorial-grid">
-        <div class="tutorial-card">
-            <h3>🔤 如何切換中英文？</h3>
-            <p>如果畫面上出現注音符號，請按一下鍵盤左側的 <span class="kbd-inline">Shift</span> 鍵即可切換成英文輸入。</p>
-        </div>
-        <div class="tutorial-card">
-            <h3>📏 什麼是全形和半形？</h3>
-            <p>全形字母 <span class="kbd-inline">ａ</span> 胖一倍，位址不能用。按 <span class="kbd-inline">Shift</span> + <span class="kbd-inline">Space</span> 切換回半形。</p>
-        </div>
-        <div class="tutorial-card">
-            <h3>🔝 大小寫怎麼分？</h3>
-            <p>按一下 <span class="kbd-inline">Caps Lock</span> 鎖定大寫（右上燈亮）。練習位址請關掉它，用小寫打。</p>
-        </div>
+        <div class="tutorial-card"><h3>🔤 如何切換中英文？</h3><p>按一下鍵盤左側的 <span class="kbd-inline">Shift</span> 鍵即可切換。</p></div>
+        <div class="tutorial-card"><h3>📏 什麼是全形和半形？</h3><p>全形字母胖一倍不能用。按 <span class="kbd-inline">Shift</span> + <span class="kbd-inline">Space</span> 切換。</p></div>
+        <div class="tutorial-card"><h3>🔝 大小寫怎麼分？</h3><p>按 <span class="kbd-inline">Caps Lock</span> 鎖定大寫。練習時請關閉，用小寫打。</p></div>
     </div>
 
-    <!-- 獎狀成功彈窗 -->
-    <div id="successModal" class="modal-overlay">
-        <!-- 這裡會由 JS 動態生成獎狀內容 -->
-    </div>
+    <div id="successModal" class="modal-overlay"></div>
 
     <script>
         const target = "@apps.ntpc.edu.tw";
         let currentIndex = 0;
         let mode = 'practice';
-        
-        // 計時器相關
         let startTime = null;
         let timerInterval = null;
 
@@ -382,18 +326,9 @@
             mode = newMode;
             document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(`btn-${mode}`).classList.add('active');
-            
-            // 記憶模式顯示計時器，隱藏下方教學卡
             const timerDisplay = document.getElementById('timerDisplay');
-            const tutorialCards = document.getElementById('tutorialCards');
-            if (mode === 'memory') {
-                timerDisplay.classList.remove('hidden');
-                tutorialCards.classList.add('opacity-30');
-            } else {
-                timerDisplay.classList.add('hidden');
-                tutorialCards.classList.remove('opacity-30');
-            }
-            
+            if (mode === 'memory') timerDisplay.classList.remove('hidden');
+            else timerDisplay.classList.add('hidden');
             resetProgress();
         }
 
@@ -414,11 +349,7 @@
             }, 100);
         }
 
-        function stopTimer() {
-            clearInterval(timerInterval);
-            timerInterval = null;
-            startTime = null;
-        }
+        function stopTimer() { clearInterval(timerInterval); timerInterval = null; startTime = null; }
 
         function isFullWidth(str) { return /[^\x00-\xff]/.test(str); }
 
@@ -449,11 +380,8 @@
                         document.getElementById('key-shift-r').classList.add('target-modifier');
                         hintEl.textContent = "提示：按住 Shift 再按 2 打出 @";
                     } else { hintEl.textContent = `請按小寫字母 ${char.toUpperCase()}`; }
-                } else if (mode === 'challenge') {
-                    hintEl.textContent = "🔥 挑戰模式：無按鍵提示。";
-                } else {
-                    hintEl.textContent = "🧠 記憶模式：目標已隱藏，請開始盲打！";
-                }
+                } else if (mode === 'challenge') { hintEl.textContent = "🔥 挑戰模式：無按鍵提示。"; }
+                else { hintEl.textContent = "🧠 記憶模式：請憑記憶輸入完整位址！"; }
             } else { 
                 showSuccess(); 
             }
@@ -461,62 +389,53 @@
 
         function showSuccess() {
             const modal = document.getElementById('successModal');
-            let finalTime = 0;
-            let score = 0;
-            let praise = "太棒了！你學會了校務信箱位址！";
             
-            if (startTime) {
-                finalTime = ((Date.now() - startTime) / 1000).toFixed(1);
+            if (mode === 'memory') {
+                // 只有記憶模式顯示獎狀
+                let finalTime = ((Date.now() - startTime) / 1000).toFixed(1);
                 stopTimer();
-                // 分數計算：10000 為基礎，一秒扣 150 分，最低 1000 分
-                score = Math.max(1000, 10000 - Math.floor(finalTime * 150));
-                
-                if (finalTime < 10) praise = "你是神速打字王！速度驚人！⚡";
-                else if (finalTime < 20) praise = "鍵盤小超人！反應非常快喔！🦸";
-                else if (finalTime < 40) praise = "記憶力大師！完全沒看提示！🧠";
-                else praise = "你完成了這項艱難的挑戰，很有毅力！💪";
-            }
+                let score = Math.max(1000, 10000 - Math.floor(finalTime * 150));
+                let praise = finalTime < 15 ? "你是神速打字王！⚡" : "記憶力大師！完全沒看提示！🧠";
 
-            // 動態生成獎狀 HTML - 橫式佈局
-            modal.innerHTML = `
-                <div class="certificate">
-                    <div class="certificate-inner">
-                        <div class="cert-header">榮譽獎狀</div>
-                        <div class="cert-title">新北市校務系統鍵盤輸入競賽</div>
-                        <div class="cert-name">鍵盤小小達人</div>
-                        <div class="cert-content">
-                            恭喜參加本系統挑戰賽，成功完成了校務信箱位址的正確輸入。<br>
-                            展現了出色的鍵盤空間感與專注力。特頒此狀，以茲鼓勵。
-                        </div>
-                        <div class="cert-row">
-                            <div class="cert-stats">
-                                <div class="stat-item">完成時間<b>${finalTime} 秒</b></div>
-                                <div class="stat-item">挑戰模式<b>${mode === 'memory' ? '🧠 記憶模式' : '🔥 挑戰模式'}</b></div>
-                                <div class="stat-item">最終分數<b>${score} 分</b></div>
+                modal.innerHTML = `
+                    <div class="certificate">
+                        <div class="certificate-inner">
+                            <div class="cert-header">榮譽獎狀</div>
+                            <div class="cert-title">新北市校務系統鍵盤輸入競賽</div>
+                            <div class="cert-name">鍵盤小小達人</div>
+                            <div class="cert-content">
+                                恭喜參加記憶模式挑戰賽，成功在完全沒有提示的情況下，<br>
+                                精確輸入了電子信箱位址。特頒此狀，以茲鼓勵。
                             </div>
-                            <div class="cert-praise">${praise}</div>
-                        </div>
-                        <div class="cert-footer">
-                            <div class="text-left text-slate-400 text-sm">
-                                發證機關：新北鍵盤教學系統<br>
-                                日期：${new Date().getFullYear()}年${new Date().getMonth() + 1}月${new Date().getDate()}日
+                            <div class="cert-row">
+                                <div class="cert-stats">
+                                    <div class="stat-item">完成時間<b>${finalTime} 秒</b></div>
+                                    <div class="stat-item">最終分數<b>${score} 分</b></div>
+                                </div>
+                                <div class="cert-praise">${praise}</div>
                             </div>
-                            <div class="seal-container">
+                            <div class="cert-footer">
+                                <div class="text-left text-slate-400 text-sm">日期：${new Date().toLocaleDateString()}</div>
                                 <svg class="seal" viewBox="0 0 100 100">
                                     <circle cx="50" cy="50" r="45" fill="none" stroke="#c0392b" stroke-width="3"/>
-                                    <circle cx="50" cy="50" r="40" fill="none" stroke="#c0392b" stroke-width="1" stroke-dasharray="2,2"/>
-                                    <text x="50" y="45" font-size="10" fill="#c0392b" text-anchor="middle" font-weight="bold">校務信箱</text>
-                                    <text x="50" y="62" font-size="10" fill="#c0392b" text-anchor="middle" font-weight="bold">挑戰成功</text>
-                                    <path d="M30 50 Q50 30 70 50 Q50 70 30 50" fill="none" stroke="#c0392b" stroke-width="1" opacity="0.5"/>
+                                    <text x="50" y="55" font-size="10" fill="#c0392b" text-anchor="middle" font-weight="bold">記憶挑戰成功</text>
                                 </svg>
                             </div>
                         </div>
-                    </div>
-                    <div class="reset-btn-container">
-                        <button onclick="resetProgress()" class="bg-blue-600 hover:bg-blue-700 text-white px-12 py-3 rounded-full text-xl font-bold transition shadow-lg transform hover:scale-105">再挑戰一次</button>
-                    </div>
-                </div>
-            `;
+                        <div class="mt-6"><button onclick="resetProgress()" class="bg-blue-600 text-white px-10 py-3 rounded-full font-bold shadow-lg">再挑戰一次</button></div>
+                    </div>`;
+            } else {
+                // 其他模式顯示簡易版提示
+                modal.innerHTML = `
+                    <div class="simple-success">
+                        <h2 class="text-3xl font-bold text-blue-600 mb-4">做得好！👏</h2>
+                        <p class="text-xl text-slate-600 mb-8">你已經學會輸入電子信箱位址了。</p>
+                        <div class="flex flex-col gap-4">
+                            <button onclick="setMode('memory')" class="bg-purple-600 text-white px-8 py-3 rounded-full font-bold">挑戰記憶模式拿獎狀</button>
+                            <button onclick="resetProgress()" class="text-slate-400 font-medium">再練一次</button>
+                        </div>
+                    </div>`;
+            }
             modal.style.display = 'flex';
         }
 
@@ -530,33 +449,22 @@
             const needed = target[currentIndex];
             const typed = e.key;
 
-            // 嚴謹偵測
-            if (isFullWidth(typed) && typed !== "Process") {
-                updateUI("⚠️ 全形模式！請按 Shift + Space 切換回半形。");
-                return;
-            }
-
+            if (isFullWidth(typed) && typed !== "Process") { updateUI("⚠️ 全形模式！請按 Shift + Space 切換。"); return; }
             if (/[a-z]/.test(needed) && typed === needed.toUpperCase() && typed !== needed) {
-                if (capsOn) updateUI("⚠️ 大寫燈亮了！請關掉 Caps Lock。");
+                if (capsOn) updateUI("⚠️ 大寫燈亮了！請關閉 Caps Lock。");
                 else updateUI("⚠️ 打到大寫了！不需按 Shift。");
                 return;
             }
-
             if (e.key === 'Process' || (typed.length === 1 && /[\u4e00-\u9fa5]/.test(typed))) {
-                updateUI("⚠️ 中文輸入中！請按 Shift 切換回英文。");
+                updateUI("⚠️ 中文模式！請按 Shift 切換回英文。");
                 return;
             }
 
             if (typed === needed) {
-                // 如果是第一步且在記憶/挑戰模式，開始計時
-                if (currentIndex === 0 && (mode === 'memory' || mode === 'challenge')) {
-                    startTimer();
-                }
+                if (currentIndex === 0 && (mode === 'memory' || mode === 'challenge')) startTimer();
                 currentIndex++;
                 updateUI();
-            } else if (typed.length === 1) {
-                updateUI(`❌ 打錯了！你需要的是 "${needed}"。`);
-            }
+            } else if (typed.length === 1) { updateUI(`❌ 打錯了！你需要的是 "${needed}"。`); }
         });
 
         window.addEventListener('keyup', (e) => {
