@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>104 鍵擬真鍵盤教學 - 榮譽獎狀挑戰版</title>
+    <title>電子信箱輸入教學 - 榮譽獎狀挑戰版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
@@ -173,32 +173,45 @@
             background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 1000;
         }
         
-        /* 獎狀樣式 */
+        /* 獎狀樣式 - 調整為橫式 A4 比例 */
         .certificate {
             background: #fffdf5;
-            padding: 50px;
-            border-radius: 5px;
-            width: 700px;
-            max-width: 95%;
+            padding: 40px;
+            border-radius: 4px;
+            width: 900px; /* 橫式寬度 */
+            max-width: 95vw;
             position: relative;
-            border: 20px solid #c0a16b;
+            border: 15px solid #c0a16b;
             box-shadow: 0 0 50px rgba(0,0,0,0.5);
             text-align: center;
             font-family: "Noto Serif TC", serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         .certificate-inner {
             border: 2px solid #c0a16b;
-            padding: 30px;
+            padding: 25px 40px;
             height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="none" stroke="%23f2e8cf" stroke-width="0.5"/></svg>');
         }
-        .cert-header { color: #8e6d31; font-size: 40px; font-weight: 800; margin-bottom: 20px; letter-spacing: 10px; }
-        .cert-title { font-size: 24px; color: #2c3e50; margin-bottom: 30px; }
-        .cert-name { font-size: 32px; font-weight: bold; border-bottom: 2px solid #2c3e50; display: inline-block; padding: 0 30px; margin-bottom: 20px; }
-        .cert-content { font-size: 20px; color: #34495e; line-height: 2; margin-bottom: 40px; }
-        .cert-stats { display: flex; justify-content: space-around; background: #fdf6e3; padding: 15px; border-radius: 10px; border: 1px dashed #c0a16b; }
-        .stat-item b { display: block; font-size: 24px; color: #c0392b; }
-        .cert-footer { margin-top: 40px; display: flex; justify-content: space-between; align-items: flex-end; }
-        .seal { width: 100px; height: 100px; opacity: 0.8; }
+        .cert-header { color: #8e6d31; font-size: 42px; font-weight: 900; margin-bottom: 10px; letter-spacing: 15px; }
+        .cert-title { font-size: 20px; color: #5d4037; margin-bottom: 20px; border-bottom: 1px solid #d7ccc8; display: inline-block; padding-bottom: 5px; }
+        .cert-name { font-size: 36px; font-weight: bold; color: #2c3e50; display: block; margin: 15px 0; }
+        .cert-content { font-size: 22px; color: #3e2723; line-height: 1.8; margin: 20px 0 30px; }
+        
+        .cert-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; gap: 30px; }
+        .cert-stats { flex: 1; display: flex; justify-content: space-around; background: #fdf6e3; padding: 15px; border-radius: 8px; border: 1px solid #e0e0e0; }
+        .stat-item { font-size: 16px; color: #795548; }
+        .stat-item b { display: block; font-size: 22px; color: #d84315; }
+        
+        .cert-praise { flex: 1; font-size: 24px; color: #1565c0; font-weight: bold; text-shadow: 1px 1px 1px rgba(0,0,0,0.1); }
+
+        .cert-footer { margin-top: 20px; display: flex; justify-content: space-between; align-items: flex-end; }
+        .seal-container { position: relative; }
+        .seal { width: 110px; height: 110px; opacity: 0.85; filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.1)); }
+        
+        .reset-btn-container { margin-top: 30px; }
     </style>
 </head>
 <body>
@@ -464,34 +477,44 @@
                 else praise = "你完成了這項艱難的挑戰，很有毅力！💪";
             }
 
-            // 動態生成獎狀 HTML
+            // 動態生成獎狀 HTML - 橫式佈局
             modal.innerHTML = `
                 <div class="certificate">
                     <div class="certificate-inner">
                         <div class="cert-header">榮譽獎狀</div>
-                        <div class="cert-title">恭喜 鍵盤小小達人</div>
-                        <div class="cert-name">完成挑戰</div>
+                        <div class="cert-title">新北市校務系統鍵盤輸入競賽</div>
+                        <div class="cert-name">鍵盤小小達人</div>
                         <div class="cert-content">
-                            參加「新北市校務信箱輸入」挑戰賽，<br>
-                            展現了卓越的記憶力與精準的打字技術。<br>
-                            特頒此狀，以茲鼓勵。
+                            恭喜參加本系統挑戰賽，成功完成了校務信箱位址的正確輸入。<br>
+                            展現了出色的鍵盤空間感與專注力。特頒此狀，以茲鼓勵。
                         </div>
-                        <div class="cert-stats">
-                            <div class="stat-item">完成時間<b>${finalTime} 秒</b></div>
-                            <div class="stat-item">挑戰模式<b>${mode === 'memory' ? '🧠 記憶模式' : '🔥 挑戰模式'}</b></div>
-                            <div class="stat-item">最終分數<b>${score} 分</b></div>
+                        <div class="cert-row">
+                            <div class="cert-stats">
+                                <div class="stat-item">完成時間<b>${finalTime} 秒</b></div>
+                                <div class="stat-item">挑戰模式<b>${mode === 'memory' ? '🧠 記憶模式' : '🔥 挑戰模式'}</b></div>
+                                <div class="stat-item">最終分數<b>${score} 分</b></div>
+                            </div>
+                            <div class="cert-praise">${praise}</div>
                         </div>
-                        <div class="mt-8 text-xl text-blue-600 font-bold">${praise}</div>
                         <div class="cert-footer">
-                            <div class="text-left text-slate-400 text-sm">發證機關：新北鍵盤教學系統<br>日期：2026年3月</div>
-                            <svg class="seal" viewBox="0 0 100 100">
-                                <circle cx="50" cy="50" r="45" fill="none" stroke="#c0392b" stroke-width="4"/>
-                                <text x="50" y="45" font-size="12" fill="#c0392b" text-anchor="middle" font-weight="bold">校務信箱</text>
-                                <text x="50" y="65" font-size="12" fill="#c0392b" text-anchor="middle" font-weight="bold">挑戰成功</text>
-                            </svg>
+                            <div class="text-left text-slate-400 text-sm">
+                                發證機關：新北鍵盤教學系統<br>
+                                日期：${new Date().getFullYear()}年${new Date().getMonth() + 1}月${new Date().getDate()}日
+                            </div>
+                            <div class="seal-container">
+                                <svg class="seal" viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="45" fill="none" stroke="#c0392b" stroke-width="3"/>
+                                    <circle cx="50" cy="50" r="40" fill="none" stroke="#c0392b" stroke-width="1" stroke-dasharray="2,2"/>
+                                    <text x="50" y="45" font-size="10" fill="#c0392b" text-anchor="middle" font-weight="bold">校務信箱</text>
+                                    <text x="50" y="62" font-size="10" fill="#c0392b" text-anchor="middle" font-weight="bold">挑戰成功</text>
+                                    <path d="M30 50 Q50 30 70 50 Q50 70 30 50" fill="none" stroke="#c0392b" stroke-width="1" opacity="0.5"/>
+                                </svg>
+                            </div>
                         </div>
                     </div>
-                    <button onclick="resetProgress()" class="mt-8 bg-blue-600 hover:bg-blue-700 text-white px-10 py-3 rounded-full text-xl font-bold transition shadow-lg">再練一次</button>
+                    <div class="reset-btn-container">
+                        <button onclick="resetProgress()" class="bg-blue-600 hover:bg-blue-700 text-white px-12 py-3 rounded-full text-xl font-bold transition shadow-lg transform hover:scale-105">再挑戰一次</button>
+                    </div>
                 </div>
             `;
             modal.style.display = 'flex';
