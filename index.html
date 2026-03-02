@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>104 鍵擬真鍵盤教學 - 嚴謹大小寫與半形偵測</title>
+    <title>104 鍵擬真鍵盤教學 - 榮譽獎狀挑戰版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
@@ -29,7 +29,6 @@
             overflow-x: auto;
         }
 
-        /* 鍵盤本體外框 */
         .keyboard-frame {
             background: #1e272e;
             padding: 25px;
@@ -39,7 +38,6 @@
             min-width: 1200px;
         }
 
-        /* 燈號區 */
         .indicator-panel {
             display: flex;
             justify-content: flex-end;
@@ -59,7 +57,6 @@
             color: #95a5a6; font-size: 10px; text-transform: uppercase; font-weight: bold;
         }
 
-        /* 鍵盤佈局 */
         .keyboard-main-layout { display: flex; gap: 15px; }
         .section-alpha { width: 780px; }
         .section-nav { width: 155px; }
@@ -93,12 +90,10 @@
             background: var(--press-bg);
         }
 
-        /* 特殊按鍵寬度 */
         .w-tab { width: 75px; } .w-caps { width: 85px; } .w-enter { width: 100px; }
         .w-shift-l { width: 115px; } .w-shift-r { width: 140px; } .w-ctrl { width: 65px; }
         .w-space { width: 335px; } .w-backspace { width: 98px; } .w-numpad-0 { width: 102px; }
 
-        /* 高亮提示 */
         .key.target-next {
             background: var(--target-glow);
             color: white;
@@ -123,7 +118,6 @@
             100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
         }
 
-        /* 進度面板 */
         .progress-card {
             background: white; border-radius: 15px; padding: 20px;
             margin-bottom: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
@@ -149,7 +143,6 @@
             75% { transform: translateX(5px); }
         }
 
-        /* 教學區塊 */
         .tutorial-grid {
             display: grid; grid-template-columns: repeat(3, 1fr);
             gap: 20px; width: 100%; max-width: 1200px; margin-top: 30px;
@@ -177,11 +170,35 @@
 
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 1000;
+            background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 1000;
         }
-        .modal-content {
-            background: white; padding: 40px; border-radius: 24px; text-align: center; max-width: 500px; width: 90%;
+        
+        /* 獎狀樣式 */
+        .certificate {
+            background: #fffdf5;
+            padding: 50px;
+            border-radius: 5px;
+            width: 700px;
+            max-width: 95%;
+            position: relative;
+            border: 20px solid #c0a16b;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            text-align: center;
+            font-family: "Noto Serif TC", serif;
         }
+        .certificate-inner {
+            border: 2px solid #c0a16b;
+            padding: 30px;
+            height: 100%;
+        }
+        .cert-header { color: #8e6d31; font-size: 40px; font-weight: 800; margin-bottom: 20px; letter-spacing: 10px; }
+        .cert-title { font-size: 24px; color: #2c3e50; margin-bottom: 30px; }
+        .cert-name { font-size: 32px; font-weight: bold; border-bottom: 2px solid #2c3e50; display: inline-block; padding: 0 30px; margin-bottom: 20px; }
+        .cert-content { font-size: 20px; color: #34495e; line-height: 2; margin-bottom: 40px; }
+        .cert-stats { display: flex; justify-content: space-around; background: #fdf6e3; padding: 15px; border-radius: 10px; border: 1px dashed #c0a16b; }
+        .stat-item b { display: block; font-size: 24px; color: #c0392b; }
+        .cert-footer { margin-top: 40px; display: flex; justify-content: space-between; align-items: flex-end; }
+        .seal { width: 100px; height: 100px; opacity: 0.8; }
     </style>
 </head>
 <body>
@@ -190,11 +207,12 @@
         <div class="mode-selector">
             <button id="btn-practice" class="mode-btn active" onclick="setMode('practice')">🎓 練習</button>
             <button id="btn-challenge" class="mode-btn" onclick="setMode('challenge')">🔥 挑戰</button>
-            <button id="btn-memory" class="mode-btn" onclick="setMode('memory')">🧠 記憶</button>
+            <button id="btn-memory" class="mode-btn" onclick="setMode('memory')">🧠 記憶挑戰區</button>
             <button class="mode-btn bg-slate-100 border-none" onclick="resetProgress()">🔄 重來</button>
         </div>
         <div id="targetDisplay" class="target-string"></div>
         <div id="hintText" class="hint-box">請依照指示按下按鍵</div>
+        <div id="timerDisplay" class="text-sm font-mono text-slate-400 mt-2 hidden">計時中：0.0s</div>
     </div>
 
     <div class="keyboard-frame">
@@ -206,6 +224,7 @@
 
         <div class="keyboard-main-layout">
             <div class="section-alpha">
+                <!-- 第一排 -->
                 <div class="kb-row">
                     <div class="key" data-code="Escape"><span>Esc</span></div>
                     <div style="width: 40px"></div>
@@ -215,6 +234,7 @@
                     <div style="width: 25px"></div>
                     <div class="key" data-code="F9"><span>F9</span></div><div class="key" data-code="F10"><span>F10</span></div><div class="key" data-code="F11"><span>F11</span></div><div class="key" data-code="F12"><span>F12</span></div>
                 </div>
+                <!-- 數字排 -->
                 <div class="kb-row">
                     <div class="key" data-code="Backquote"><span>~<br>`</span></div>
                     <div class="key" data-code="Digit1"><span>!<br>1</span></div>
@@ -231,22 +251,26 @@
                     <div class="key" data-code="Equal"><span>+<br>=</span></div>
                     <div class="key w-backspace" data-code="Backspace"><span>Backspace</span></div>
                 </div>
+                <!-- 第三排 -->
                 <div class="kb-row">
                     <div class="key w-tab" data-code="Tab"><span>Tab</span></div>
                     <div class="key" data-code="KeyQ"><span>Q</span></div><div class="key" data-code="KeyW"><span>W</span></div><div class="key" data-code="KeyE"><span>E</span></div><div class="key" data-code="KeyR"><span>R</span></div><div class="key" data-code="KeyT"><span>T</span></div><div class="key" data-code="KeyY"><span>Y</span></div><div class="key" data-code="KeyU"><span>U</span></div><div class="key" data-code="KeyI"><span>I</span></div><div class="key" data-code="KeyO"><span>O</span></div><div class="key" data-code="KeyP"><span>P</span></div>
                     <div class="key" data-code="BracketLeft"><span>{<br>[</span></div><div class="key" data-code="BracketRight"><span>}<br>]</span></div><div class="key" style="width: 58px;" data-code="Backslash"><span>|<br>\</span></div>
                 </div>
+                <!-- 第四排 -->
                 <div class="kb-row">
                     <div class="key w-caps" data-code="CapsLock"><span>Caps Lock</span></div>
                     <div class="key" data-code="KeyA"><span>A</span></div><div class="key" data-code="KeyS"><span>S</span></div><div class="key" data-code="KeyD"><span>D</span></div><div class="key" data-code="KeyF"><span>F</span></div><div class="key" data-code="KeyG"><span>G</span></div><div class="key" data-code="KeyH"><span>H</span></div><div class="key" data-code="KeyJ"><span>J</span></div><div class="key" data-code="KeyK"><span>K</span></div><div class="key" data-code="KeyL"><span>L</span></div>
                     <div class="key" data-code="Semicolon"><span>:<br>;</span></div><div class="key" data-code="Quote"><span>"<br>'</span></div><div class="key w-enter" data-code="Enter"><span>Enter</span></div>
                 </div>
+                <!-- 第五排 -->
                 <div class="kb-row">
                     <div class="key w-shift-l" data-code="ShiftLeft" id="key-shift-l"><span>Shift</span></div>
                     <div class="key" data-code="KeyZ"><span>Z</span></div><div class="key" data-code="KeyX"><span>X</span></div><div class="key" data-code="KeyC"><span>C</span></div><div class="key" data-code="KeyV"><span>V</span></div><div class="key" data-code="KeyB"><span>B</span></div><div class="key" data-code="KeyN"><span>N</span></div><div class="key" data-code="KeyM"><span>M</span></div>
                     <div class="key" data-code="Comma"><span>< <br>,</span></div><div class="key" data-code="Period"><span>> <br>.</span></div><div class="key" data-code="Slash"><span>?<br>/</span></div>
                     <div class="key w-shift-r" data-code="ShiftRight" id="key-shift-r"><span>Shift</span></div>
                 </div>
+                <!-- 第六排 -->
                 <div class="kb-row">
                     <div class="key w-ctrl" data-code="ControlLeft"><span>Ctrl</span></div><div class="key" data-code="MetaLeft"><span>Win</span></div><div class="key" data-code="AltLeft"><span>Alt</span></div>
                     <div class="key w-space" data-code="Space"><span>Space</span></div>
@@ -304,34 +328,34 @@
     </div>
 
     <!-- 教學小知識 -->
-    <div class="tutorial-grid">
+    <div id="tutorialCards" class="tutorial-grid">
         <div class="tutorial-card">
             <h3>🔤 如何切換中英文？</h3>
-            <p>如果畫面上出現注音符號，請按一下鍵盤左側的 <span class="kbd-inline">Shift</span> 鍵或是同時按下 <span class="kbd-inline">Ctrl</span> + <span class="kbd-inline">Space (空白鍵)</span> 即可切換成英文輸入。</p>
+            <p>如果畫面上出現注音符號，請按一下鍵盤左側的 <span class="kbd-inline">Shift</span> 鍵即可切換成英文輸入。</p>
         </div>
         <div class="tutorial-card">
             <h3>📏 什麼是全形和半形？</h3>
-            <p>全形字母 <span class="kbd-inline">ａ</span> 比半形字母 <span class="kbd-inline">a</span> 胖一倍。如果打不出來，請檢查輸入法圖示，或按下 <span class="kbd-inline">Shift</span> + <span class="kbd-inline">Space</span> 切換回半形。</p>
+            <p>全形字母 <span class="kbd-inline">ａ</span> 胖一倍，位址不能用。按 <span class="kbd-inline">Shift</span> + <span class="kbd-inline">Space</span> 切換回半形。</p>
         </div>
         <div class="tutorial-card">
             <h3>🔝 大小寫怎麼分？</h3>
-            <p>按一下 <span class="kbd-inline">Caps Lock</span> 可以讓所有字母變大寫（右上角燈會亮）。如果要偶爾打大寫，可以「按住」 <span class="kbd-inline">Shift</span> 不放再按字母。</p>
+            <p>按一下 <span class="kbd-inline">Caps Lock</span> 鎖定大寫（右上燈亮）。練習位址請關掉它，用小寫打。</p>
         </div>
     </div>
 
-    <!-- 成功彈窗 -->
+    <!-- 獎狀成功彈窗 -->
     <div id="successModal" class="modal-overlay">
-        <div class="modal-content">
-            <h2 class="text-4xl font-bold text-green-600 mb-4">挑戰成功！🎉</h2>
-            <p class="text-xl text-slate-600 mb-8">完美輸入正確的大小寫與半形字元。</p>
-            <button onclick="resetProgress()" class="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-full text-xl font-bold transition">再玩一次</button>
-        </div>
+        <!-- 這裡會由 JS 動態生成獎狀內容 -->
     </div>
 
     <script>
         const target = "@apps.ntpc.edu.tw";
         let currentIndex = 0;
         let mode = 'practice';
+        
+        // 計時器相關
+        let startTime = null;
+        let timerInterval = null;
 
         const charToKey = {
             '@': { code: 'Digit2', shift: true },
@@ -345,10 +369,43 @@
             mode = newMode;
             document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(`btn-${mode}`).classList.add('active');
+            
+            // 記憶模式顯示計時器，隱藏下方教學卡
+            const timerDisplay = document.getElementById('timerDisplay');
+            const tutorialCards = document.getElementById('tutorialCards');
+            if (mode === 'memory') {
+                timerDisplay.classList.remove('hidden');
+                tutorialCards.classList.add('opacity-30');
+            } else {
+                timerDisplay.classList.add('hidden');
+                tutorialCards.classList.remove('opacity-30');
+            }
+            
             resetProgress();
         }
 
-        function resetProgress() { currentIndex = 0; document.getElementById('successModal').style.display = 'none'; updateUI(); }
+        function resetProgress() { 
+            currentIndex = 0; 
+            document.getElementById('successModal').style.display = 'none'; 
+            stopTimer();
+            document.getElementById('timerDisplay').textContent = "計時中：0.0s";
+            updateUI(); 
+        }
+
+        function startTimer() {
+            if (startTime) return;
+            startTime = Date.now();
+            timerInterval = setInterval(() => {
+                const elapsed = (Date.now() - startTime) / 1000;
+                document.getElementById('timerDisplay').textContent = `計時中：${elapsed.toFixed(1)}s`;
+            }, 100);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            startTime = null;
+        }
 
         function isFullWidth(str) { return /[^\x00-\xff]/.test(str); }
 
@@ -377,12 +434,67 @@
                     if (mapping.shift) {
                         document.getElementById('key-shift-l').classList.add('target-modifier');
                         document.getElementById('key-shift-r').classList.add('target-modifier');
-                        hintEl.textContent = "提示：請「按住」左邊或右邊的 Shift 再按 2 來打出 @";
+                        hintEl.textContent = "提示：按住 Shift 再按 2 打出 @";
                     } else { hintEl.textContent = `請按小寫字母 ${char.toUpperCase()}`; }
+                } else if (mode === 'challenge') {
+                    hintEl.textContent = "🔥 挑戰模式：無按鍵提示。";
                 } else {
-                    hintEl.textContent = mode === 'challenge' ? "🔥 挑戰中：請輸入對應的【半形小寫】字元" : "🧠 記憶中：請默背地址並輸入";
+                    hintEl.textContent = "🧠 記憶模式：目標已隱藏，請開始盲打！";
                 }
-            } else { document.getElementById('successModal').style.display = 'flex'; }
+            } else { 
+                showSuccess(); 
+            }
+        }
+
+        function showSuccess() {
+            const modal = document.getElementById('successModal');
+            let finalTime = 0;
+            let score = 0;
+            let praise = "太棒了！你學會了校務信箱位址！";
+            
+            if (startTime) {
+                finalTime = ((Date.now() - startTime) / 1000).toFixed(1);
+                stopTimer();
+                // 分數計算：10000 為基礎，一秒扣 150 分，最低 1000 分
+                score = Math.max(1000, 10000 - Math.floor(finalTime * 150));
+                
+                if (finalTime < 10) praise = "你是神速打字王！速度驚人！⚡";
+                else if (finalTime < 20) praise = "鍵盤小超人！反應非常快喔！🦸";
+                else if (finalTime < 40) praise = "記憶力大師！完全沒看提示！🧠";
+                else praise = "你完成了這項艱難的挑戰，很有毅力！💪";
+            }
+
+            // 動態生成獎狀 HTML
+            modal.innerHTML = `
+                <div class="certificate">
+                    <div class="certificate-inner">
+                        <div class="cert-header">榮譽獎狀</div>
+                        <div class="cert-title">恭喜 鍵盤小小達人</div>
+                        <div class="cert-name">完成挑戰</div>
+                        <div class="cert-content">
+                            參加「新北市校務信箱輸入」挑戰賽，<br>
+                            展現了卓越的記憶力與精準的打字技術。<br>
+                            特頒此狀，以茲鼓勵。
+                        </div>
+                        <div class="cert-stats">
+                            <div class="stat-item">完成時間<b>${finalTime} 秒</b></div>
+                            <div class="stat-item">挑戰模式<b>${mode === 'memory' ? '🧠 記憶模式' : '🔥 挑戰模式'}</b></div>
+                            <div class="stat-item">最終分數<b>${score} 分</b></div>
+                        </div>
+                        <div class="mt-8 text-xl text-blue-600 font-bold">${praise}</div>
+                        <div class="cert-footer">
+                            <div class="text-left text-slate-400 text-sm">發證機關：新北鍵盤教學系統<br>日期：2026年3月</div>
+                            <svg class="seal" viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="45" fill="none" stroke="#c0392b" stroke-width="4"/>
+                                <text x="50" y="45" font-size="12" fill="#c0392b" text-anchor="middle" font-weight="bold">校務信箱</text>
+                                <text x="50" y="65" font-size="12" fill="#c0392b" text-anchor="middle" font-weight="bold">挑戰成功</text>
+                            </svg>
+                        </div>
+                    </div>
+                    <button onclick="resetProgress()" class="mt-8 bg-blue-600 hover:bg-blue-700 text-white px-10 py-3 rounded-full text-xl font-bold transition shadow-lg">再練一次</button>
+                </div>
+            `;
+            modal.style.display = 'flex';
         }
 
         window.addEventListener('keydown', (e) => {
@@ -395,30 +507,33 @@
             const needed = target[currentIndex];
             const typed = e.key;
 
-            // 嚴謹偵測與教學引導
+            // 嚴謹偵測
             if (isFullWidth(typed) && typed !== "Process") {
-                updateUI("⚠️ 現在是【全形】模式！字變胖了。請按 <kbd class='kbd-inline'>Shift</kbd> + <kbd class='kbd-inline'>Space</kbd> 切換回半形。");
+                updateUI("⚠️ 全形模式！請按 Shift + Space 切換回半形。");
                 return;
             }
 
-            // 大小寫與輸入法檢查
             if (/[a-z]/.test(needed) && typed === needed.toUpperCase() && typed !== needed) {
-                if (capsOn) {
-                    updateUI("⚠️ 大寫燈亮了！請按一下鍵盤左邊的 <kbd class='kbd-inline'>Caps Lock</kbd> 關掉它，字才會變小。");
-                } else {
-                    updateUI("⚠️ 你按到了大寫！請直接按下字母就好，不要按 Shift 喔。");
-                }
+                if (capsOn) updateUI("⚠️ 大寫燈亮了！請關掉 Caps Lock。");
+                else updateUI("⚠️ 打到大寫了！不需按 Shift。");
                 return;
             }
 
-            // 中文輸入法偵測 (當 e.key 為 'Process' 時通常代表還在選字階段)
             if (e.key === 'Process' || (typed.length === 1 && /[\u4e00-\u9fa5]/.test(typed))) {
-                updateUI("⚠️ 偵測到注音或中文！請按一下 <kbd class='kbd-inline'>Shift</kbd> 鍵切換到英文輸入。");
+                updateUI("⚠️ 中文輸入中！請按 Shift 切換回英文。");
                 return;
             }
 
-            if (typed === needed) { currentIndex++; updateUI(); } 
-            else if (typed.length === 1) { updateUI(`❌ 按錯了！你需要的是 "${needed}"。再試一次！`); }
+            if (typed === needed) {
+                // 如果是第一步且在記憶/挑戰模式，開始計時
+                if (currentIndex === 0 && (mode === 'memory' || mode === 'challenge')) {
+                    startTimer();
+                }
+                currentIndex++;
+                updateUI();
+            } else if (typed.length === 1) {
+                updateUI(`❌ 打錯了！你需要的是 "${needed}"。`);
+            }
         });
 
         window.addEventListener('keyup', (e) => {
